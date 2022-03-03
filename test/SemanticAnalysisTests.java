@@ -70,6 +70,7 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("return 3 / 2");
         successInput("return 2 % 3");
         successInput("return 3 % 2");
+        successInput("return 3 ^ 2");
 
         successInput("return 1.0 + 2.0");
         successInput("return 2.0 - 1.0");
@@ -78,6 +79,7 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("return 3.0 / 2.0");
         successInput("return 2.0 % 3.0");
         successInput("return 3.0 % 2.0");
+        successInput("return 3.0 ^ 2.0");
 
         successInput("return 1 + 2.0");
         successInput("return 2 - 1.0");
@@ -86,6 +88,8 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("return 3 / 2.0");
         successInput("return 2 % 3.0");
         successInput("return 3 % 2.0");
+        successInput("return 3 ^ 2.0");
+
 
         successInput("return 1.0 + 2");
         successInput("return 2.0 - 1");
@@ -94,6 +98,8 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("return 3.0 / 2");
         successInput("return 2.0 % 3");
         successInput("return 3.0 % 2");
+        successInput("return 3.0 ^ 2");
+
 
         failureInputWith("return 2 + true", "Trying to add Int with Bool");
         failureInputWith("return true + 2", "Trying to add Bool with Int");

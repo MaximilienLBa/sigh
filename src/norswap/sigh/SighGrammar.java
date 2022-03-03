@@ -51,6 +51,7 @@ public class SighGrammar extends Grammar
     public rule DOT             = word(".");
     public rule DOLLAR          = word("$");
     public rule COMMA           = word(",");
+    public rule POWER             = word("^");
 
     public rule _var            = reserved("var");
     public rule _fun            = reserved("fun");
@@ -143,6 +144,7 @@ public class SighGrammar extends Grammar
             $ -> new UnaryExpressionNode($.span(), $.$[0], $.$[1]));
 
     public rule mult_op = choice(
+        POWER       .as_val(BinaryOperator.POWER),
         STAR        .as_val(BinaryOperator.MULTIPLY),
         SLASH       .as_val(BinaryOperator.DIVIDE),
         PERCENT     .as_val(BinaryOperator.REMAINDER));

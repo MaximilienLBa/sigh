@@ -14,7 +14,8 @@ public enum BinaryOperator
     GREATER_EQUAL(">="),
     LOWER_EQUAL("<="),
     AND("&&"),
-    OR("||");
+    OR("||"),
+    POWER("^");
 
     public final String string;
 

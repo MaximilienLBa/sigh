@@ -17,6 +17,7 @@ import norswap.utils.visitors.ValuedVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.math.*;
 
 import static norswap.utils.Util.cast;
 import static norswap.utils.Vanilla.coIterate;
@@ -223,6 +224,7 @@ public final class Interpreter
         Object result;
         if (floating)
             switch (node.operator) {
+                case POWER:         return Math.pow(fleft,fright);
                 case MULTIPLY:      return fleft *  fright;
                 case DIVIDE:        return fleft /  fright;
                 case REMAINDER:     return fleft %  fright;
@@ -239,6 +241,7 @@ public final class Interpreter
             }
         else
             switch (node.operator) {
+                case POWER:         return Math.pow(fleft,fright);
                 case MULTIPLY:      return ileft *  iright;
                 case DIVIDE:        return ileft /  iright;
                 case REMAINDER:     return ileft %  iright;

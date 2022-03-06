@@ -338,6 +338,8 @@ public final class InterpreterTests extends TestFixture {
         check("if (false) return 1 else if (false) return 2 else return 3 ", 3L);
 
         check("var i: Int = 0; while (i < 3) { print(\"\" + i); i = i + 1 } ", null, "0\n1\n2\n");
+
+        //check("for (var i: Int = 0 | i < 3 | i = i + 1) { print(\"\" + i);} ", null, "0\n1\n2\n");
     }
 
     // ---------------------------------------------------------------------------------------------

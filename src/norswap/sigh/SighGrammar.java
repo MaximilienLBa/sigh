@@ -62,6 +62,7 @@ public class SighGrammar extends Grammar
     public rule _if             = reserved("if");
     public rule _else           = reserved("else");
     public rule _while          = reserved("while");
+    public rule _for          = reserved("for");
     public rule _return         = reserved("return");
 
     public rule number =
@@ -120,6 +121,14 @@ public class SighGrammar extends Grammar
         seq(LSQUARE, expressions, RSQUARE)
         .push($ -> new ArrayLiteralNode($.span(), $.$[0]));
 
+    public rule queue =
+        seq(LANGLE, expressions, RANGLE)
+        .push($ -> new QueueLiteralNode($.span(), $.$[0]));
+
+    public rule stack =
+        seq(LANGLE, expressions, RANGLE)
+        .push($ -> new StackLiteralNode($.span(), $.$[0]));
+
     public rule basic_expression = choice(
         constructor,
         reference,
@@ -127,7 +136,9 @@ public class SighGrammar extends Grammar
         integer,
         string,
         paren_expression,
-        array);
+        array,
+        queue,
+        stack);
 
     public rule function_args =
         seq(LPAREN, expressions, RPAREN);
@@ -226,6 +237,14 @@ public class SighGrammar extends Grammar
         .suffix(seq(LSQUARE, RSQUARE),
             $ -> new ArrayTypeNode($.span(), $.$[0]));
 
+    public rule queue_type = left_expression()
+        .left(simple_type)
+        .suffix(seq(LANGLE,RANGLE),
+            $ -> new QueueTypeNode($.span(), $.$[0]));
+    public rule stack_type = left_expression()
+        .left(simple_type)
+        .suffix(seq(LANGLE,RANGLE),
+            $ -> new StackTypeNode($.span(), $.$[0]));
     public rule type =
         seq(array_type);
 
@@ -236,6 +255,7 @@ public class SighGrammar extends Grammar
         this.struct_decl,
         this.if_stmt,
         this.while_stmt,
+        this.for_stmt,
         this.return_stmt,
         this.expression_stmt));
 
@@ -293,6 +313,10 @@ public class SighGrammar extends Grammar
         seq(ws, statement.at_least(1))
         .as_list(StatementNode.class)
         .push($ -> new RootNode($.span(), $.$[0]));
+
+    public rule for_stmt =
+        seq(_for, expression, statement)
+            .push($ -> new ForNode($.span(), $.$[0], $.$[1],$.$[2],$.$[3]));
 
     @Override public rule root () {
         return root;

@@ -20,7 +20,6 @@ public enum BinaryOperator
     NAND("NAND"),
     NOR("NOR");
 
-
     public final String string;
 
     BinaryOperator (String string) {

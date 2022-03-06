@@ -86,6 +86,7 @@ public final class Interpreter
         visitor.register(ExpressionStatementNode.class,  this::expressionStmt);
         visitor.register(IfNode.class,                   this::ifStmt);
         visitor.register(WhileNode.class,                this::whileStmt);
+        visitor.register(ForNode.class,                  this::ForStmt);
         visitor.register(ReturnNode.class,               this::returnStmt);
 
         visitor.registerFallback(node -> null);
@@ -169,9 +170,8 @@ public final class Interpreter
             case OR:  return booleanOp(node, "or");
             case AND: return booleanOp(node, "and");
             case XOR: return booleanOp(node, "xor");
-            case NAND:return booleanOp(node,"nand");
+            case NAND: return booleanOp(node, "nand");
             case NOR: return booleanOp(node, "nor");
-
         }
 
         Object left  = get(node.left);
@@ -501,6 +501,14 @@ public final class Interpreter
     private Void whileStmt (WhileNode node)
     {
         while (get(node.condition))
+            get(node.body);
+        return null;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    private Void ForStmt (ForNode node)
+    {
+        for (get(node.init);get(node.condition);get(node.update))
             get(node.body);
         return null;
     }

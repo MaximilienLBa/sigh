@@ -144,6 +144,7 @@ public final class SemanticAnalysis
         walker.register(ExpressionStatementNode.class,  PRE_VISIT,  node -> {});
         walker.register(IfNode.class,                   PRE_VISIT,  analysis::ifStmt);
         walker.register(WhileNode.class,                PRE_VISIT,  analysis::whileStmt);
+        walker.register(ForNode.class,                  PRE_VISIT,  analysis::ForStmt);
         walker.register(ReturnNode.class,               PRE_VISIT,  analysis::returnStmt);
 
         walker.registerFallback(POST_VISIT, node -> {});
@@ -846,6 +847,20 @@ public final class SemanticAnalysis
                     node.condition);
             }
         });
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private void ForStmt (ForNode node) {
+        R.rule()
+            .using(node.condition, "type")
+            .by(r -> {
+                Type type = r.get(1);
+                if (!(type instanceof BoolType)) {
+                    r.error("For statement with a non-boolean condition of type: " + type,
+                        node.condition);
+                }
+            });
     }
 
     // ---------------------------------------------------------------------------------------------

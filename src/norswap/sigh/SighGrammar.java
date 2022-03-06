@@ -45,14 +45,16 @@ public class SighGrammar extends Grammar
     public rule RANGLE_EQUAL    = word(">=");
     public rule LANGLE          = word("<");
     public rule RANGLE          = word(">");
-    public rule AMP_AMP         = word("&&");
-    public rule BAR_BAR         = word("||");
     public rule BANG            = word("!");
     public rule DOT             = word(".");
     public rule DOLLAR          = word("$");
     public rule COMMA           = word(",");
     public rule POWER               = word("^");
     public rule XOR                 = word("XOR");
+    public rule NAND                = word("NAND");
+    public rule NOR                 = word("NOR");
+    public rule AND                 = word("AND");
+    public rule OR                  = word("OR");
 
     public rule _var            = reserved("var");
     public rule _fun            = reserved("fun");
@@ -60,6 +62,7 @@ public class SighGrammar extends Grammar
     public rule _if             = reserved("if");
     public rule _else           = reserved("else");
     public rule _while          = reserved("while");
+    public rule _for          = reserved("for");
     public rule _return         = reserved("return");
 
     public rule number =
@@ -179,12 +182,12 @@ public class SighGrammar extends Grammar
 
     public rule and_expression = left_expression()
         .operand(order_expr)
-        .infix(AMP_AMP.as_val(BinaryOperator.AND),
+        .infix(AND.as_val(BinaryOperator.AND),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule or_expression = left_expression()
         .operand(and_expression)
-        .infix(BAR_BAR.as_val(BinaryOperator.OR),
+        .infix(OR.as_val(BinaryOperator.OR),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule xor_expression = left_expression()
@@ -192,8 +195,18 @@ public class SighGrammar extends Grammar
         .infix(XOR.as_val(BinaryOperator.XOR),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
-    public rule assignment_expression = right_expression()
+    public rule nand_expression = left_expression()
         .operand(xor_expression)
+        .infix(NAND.as_val(BinaryOperator.NAND),
+            $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule nor_expression = left_expression()
+        .operand(nand_expression)
+        .infix(NOR.as_val(BinaryOperator.NOR),
+            $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule assignment_expression = right_expression()
+        .operand(nor_expression)
         .infix(EQUALS,
             $ -> new AssignmentNode($.span(), $.$[0], $.$[1]));
 
@@ -224,6 +237,7 @@ public class SighGrammar extends Grammar
         this.struct_decl,
         this.if_stmt,
         this.while_stmt,
+        this.for_stmt,
         this.return_stmt,
         this.expression_stmt));
 
@@ -281,6 +295,10 @@ public class SighGrammar extends Grammar
         seq(ws, statement.at_least(1))
         .as_list(StatementNode.class)
         .push($ -> new RootNode($.span(), $.$[0]));
+
+    public rule for_stmt =
+        seq(_for, expression, statement)
+            .push($ -> new ForNode($.span(), $.$[0], $.$[1],$.$[2],$.$[3]));
 
     @Override public rule root () {
         return root;

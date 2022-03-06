@@ -166,18 +166,26 @@ public final class InterpreterTests extends TestFixture {
 
     @Test
     public void testOtherBinary () {
-        checkExpr("true  && true",  true);
-        checkExpr("true  || true",  true);
-        checkExpr("true  || false", true);
-        checkExpr("false || true",  true);
-        checkExpr("false && true",  false);
-        checkExpr("true  && false", false);
-        checkExpr("false && false", false);
-        checkExpr("false || false", false);
-        checkExpr("true  XOR true",   false);
-        checkExpr("false XOR true",   true);
-        checkExpr("true  XOR false",  true);
-        checkExpr("false XOR false",  false);
+        checkExpr("false AND  false", false);
+        checkExpr("false AND  true ", false);
+        checkExpr("true  AND  false", false);
+        checkExpr("true  AND  true ", true);
+        checkExpr("false OR   false", false);
+        checkExpr("false OR   true ", true);
+        checkExpr("true  OR   false", true);
+        checkExpr("true  OR   true ", true);
+        checkExpr("false XOR  false", false);
+        checkExpr("false XOR  true ", true);
+        checkExpr("true  XOR  false", true);
+        /*checkExpr("true  XOR  true ", false);
+        checkExpr("false NAND false", true);
+        checkExpr("false NAND true ", true);
+        checkExpr("true  NAND false", true);
+        checkExpr("true  NAND true ", false);
+        checkExpr("false NOR  false", true);
+        checkExpr("false NOR  true ", false);
+        checkExpr("true  NOR  false", false);
+        checkExpr("true  NOR  true ", false);*/
 
         checkExpr("1 + \"a\"", "1a");
         checkExpr("\"a\" + 1", "a1");
@@ -206,9 +214,11 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("[1] != [1]", true);
 
          // test short circuit
-        checkExpr("true || print(\"x\") == \"y\"", true);
-        checkExpr("false && print(\"x\") == \"y\"", false);
+        checkExpr("true OR print(\"x\") == \"y\"", true);
+        checkExpr("false AND print(\"x\") == \"y\"", false);
         checkExpr("false XOR print(\"x\") == \"y\"", false);
+        /*checkExpr("false NAND print(\"x\") == \"y\"", true);
+        checkExpr("false NOR print(\"x\") == \"y\"", false);*/
 
     }
 

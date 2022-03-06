@@ -45,14 +45,16 @@ public class SighGrammar extends Grammar
     public rule RANGLE_EQUAL    = word(">=");
     public rule LANGLE          = word("<");
     public rule RANGLE          = word(">");
-    public rule AMP_AMP         = word("&&");
-    public rule BAR_BAR         = word("||");
     public rule BANG            = word("!");
     public rule DOT             = word(".");
     public rule DOLLAR          = word("$");
     public rule COMMA           = word(",");
     public rule POWER               = word("^");
+    public rule AND                 = word("AND");
+    public rule OR                  = word("OR");
     public rule XOR                 = word("XOR");
+    public rule NAND                = word("NAND");
+    public rule NOR                 = word("NOR");
 
     public rule _var            = reserved("var");
     public rule _fun            = reserved("fun");
@@ -179,17 +181,27 @@ public class SighGrammar extends Grammar
 
     public rule and_expression = left_expression()
         .operand(order_expr)
-        .infix(AMP_AMP.as_val(BinaryOperator.AND),
+        .infix(AND.as_val(BinaryOperator.AND),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule or_expression = left_expression()
         .operand(and_expression)
-        .infix(BAR_BAR.as_val(BinaryOperator.OR),
+        .infix(OR.as_val(BinaryOperator.OR),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule xor_expression = left_expression()
         .operand(or_expression)
         .infix(XOR.as_val(BinaryOperator.XOR),
+            $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule nand_expression = left_expression()
+        .operand(xor_expression)
+        .infix(NAND.as_val(BinaryOperator.NAND),
+            $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule nor_expression = left_expression()
+        .operand(nand_expression)
+        .infix(NOR.as_val(BinaryOperator.NOR),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule assignment_expression = right_expression()

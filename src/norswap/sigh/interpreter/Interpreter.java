@@ -169,6 +169,9 @@ public final class Interpreter
             case OR:  return booleanOp(node, "or");
             case AND: return booleanOp(node, "and");
             case XOR: return booleanOp(node, "xor");
+            case NAND:return booleanOp(node,"nand");
+            case NOR: return booleanOp(node, "nor");
+
         }
 
         Object left  = get(node.left);
@@ -206,6 +209,10 @@ public final class Interpreter
                 return left || (boolean) get(node.right);
             case "xor":
                 return left ^ (boolean) get(node.right);
+            case "nand":
+                return ! (left && (boolean) get(node.right));
+            case "nor":
+                return ! (left || (boolean) get(node.right));
             default:
                 System.out.println("Unknown operator");
                 return true;

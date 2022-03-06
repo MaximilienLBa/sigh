@@ -13,10 +13,13 @@ public enum BinaryOperator
     LOWER("<"),
     GREATER_EQUAL(">="),
     LOWER_EQUAL("<="),
-    AND("&&"),
-    OR("||"),
     POWER("^"),
-    XOR("XOR");
+    AND("AND"),
+    OR("OR"),
+    XOR("XOR"),
+    NAND("NAND"),
+    NOR("NOR");
+
 
     public final String string;
 

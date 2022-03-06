@@ -174,6 +174,10 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("true  && false", false);
         checkExpr("false && false", false);
         checkExpr("false || false", false);
+        checkExpr("true  XOR true",   false);
+        checkExpr("false XOR true",   true);
+        checkExpr("true  XOR false",  true);
+        checkExpr("false XOR false",  false);
 
         checkExpr("1 + \"a\"", "1a");
         checkExpr("\"a\" + 1", "a1");
@@ -202,8 +206,10 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("[1] != [1]", true);
 
          // test short circuit
-        checkExpr("true || print(\"x\") == \"y\"", true, "");
-        checkExpr("false && print(\"x\") == \"y\"", false, "");
+        checkExpr("true || print(\"x\") == \"y\"", true);
+        checkExpr("false && print(\"x\") == \"y\"", false);
+        checkExpr("false XOR print(\"x\") == \"y\"", false);
+
     }
 
     // ---------------------------------------------------------------------------------------------

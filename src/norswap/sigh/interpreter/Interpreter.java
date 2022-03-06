@@ -166,8 +166,9 @@ public final class Interpreter
 
         // Cases where both operands should not be evaluated.
         switch (node.operator) {
-            case OR:  return booleanOp(node, false);
-            case AND: return booleanOp(node, true);
+            case OR:  return booleanOp(node, "or");
+            case AND: return booleanOp(node, "and");
+            case XOR: return booleanOp(node, "xor");
         }
 
         Object left  = get(node.left);
@@ -195,12 +196,20 @@ public final class Interpreter
 
     // ---------------------------------------------------------------------------------------------
 
-    private boolean booleanOp (BinaryExpressionNode node, boolean isAnd)
+    private boolean booleanOp (BinaryExpressionNode node, String type)
     {
         boolean left = get(node.left);
-        return isAnd
-                ? left && (boolean) get(node.right)
-                : left || (boolean) get(node.right);
+        switch (type){
+            case "and":
+                return left && (boolean) get(node.right);
+            case "or":
+                return left || (boolean) get(node.right);
+            case "xor":
+                return left ^ (boolean) get(node.right);
+            default:
+                System.out.println("Unknown operator");
+                return true;
+        }
     }
 
     // ---------------------------------------------------------------------------------------------

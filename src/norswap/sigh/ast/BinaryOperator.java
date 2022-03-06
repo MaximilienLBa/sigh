@@ -15,7 +15,8 @@ public enum BinaryOperator
     LOWER_EQUAL("<="),
     AND("&&"),
     OR("||"),
-    POWER("^");
+    POWER("^"),
+    XOR("XOR");
 
     public final String string;
 

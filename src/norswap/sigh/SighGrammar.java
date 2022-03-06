@@ -51,7 +51,8 @@ public class SighGrammar extends Grammar
     public rule DOT             = word(".");
     public rule DOLLAR          = word("$");
     public rule COMMA           = word(",");
-    public rule POWER             = word("^");
+    public rule POWER               = word("^");
+    public rule XOR                 = word("XOR");
 
     public rule _var            = reserved("var");
     public rule _fun            = reserved("fun");
@@ -186,8 +187,13 @@ public class SighGrammar extends Grammar
         .infix(BAR_BAR.as_val(BinaryOperator.OR),
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
-    public rule assignment_expression = right_expression()
+    public rule xor_expression = left_expression()
         .operand(or_expression)
+        .infix(XOR.as_val(BinaryOperator.XOR),
+            $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule assignment_expression = right_expression()
+        .operand(xor_expression)
         .infix(EQUALS,
             $ -> new AssignmentNode($.span(), $.$[0], $.$[1]));
 

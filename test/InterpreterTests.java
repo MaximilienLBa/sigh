@@ -177,7 +177,7 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("false XOR  false", false);
         checkExpr("false XOR  true ", true);
         checkExpr("true  XOR  false", true);
-        /*checkExpr("true  XOR  true ", false);
+        checkExpr("true  XOR  true ", false);
         checkExpr("false NAND false", true);
         checkExpr("false NAND true ", true);
         checkExpr("true  NAND false", true);
@@ -185,7 +185,7 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("false NOR  false", true);
         checkExpr("false NOR  true ", false);
         checkExpr("true  NOR  false", false);
-        checkExpr("true  NOR  true ", false);*/
+        checkExpr("true  NOR  true ", false);
 
         checkExpr("1 + \"a\"", "1a");
         checkExpr("\"a\" + 1", "a1");
@@ -217,8 +217,8 @@ public final class InterpreterTests extends TestFixture {
         checkExpr("true OR print(\"x\") == \"y\"", true);
         checkExpr("false AND print(\"x\") == \"y\"", false);
         checkExpr("false XOR print(\"x\") == \"y\"", false);
-        /*checkExpr("false NAND print(\"x\") == \"y\"", true);
-        checkExpr("false NOR print(\"x\") == \"y\"", false);*/
+        checkExpr("false NAND print(\"x\") == \"y\"", true);
+        checkExpr("false NOR print(\"x\") == \"y\"", true);
 
     }
 

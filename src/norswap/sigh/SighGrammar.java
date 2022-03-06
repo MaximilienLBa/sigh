@@ -205,7 +205,7 @@ public class SighGrammar extends Grammar
             $ -> new BinaryExpressionNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule assignment_expression = right_expression()
-        .operand(xor_expression)
+        .operand(nor_expression)
         .infix(EQUALS,
             $ -> new AssignmentNode($.span(), $.$[0], $.$[1]));
 

@@ -113,6 +113,7 @@ public class BytecodeCompiler
         visitor.register(ExpressionStatementNode.class,  this::expressionStmt);
         visitor.register(IfNode.class,                   this::ifStmt);
         visitor.register(WhileNode.class,                this::whileStmt);
+        visitor.register(ForNode.class,                  this::forStmt);
         visitor.register(ReturnNode.class,               this::returnStmt);
     }
 
@@ -663,6 +664,19 @@ public class BytecodeCompiler
     // ---------------------------------------------------------------------------------------------
 
     private Object whileStmt (WhileNode node)
+    {
+        Label startLabel = new Label();
+        Label endLabel = new Label();
+        method.visitLabel(startLabel);
+        run(node.condition);
+        method.visitJumpInsn(IFEQ, endLabel);
+        run(node.body);
+        method.visitJumpInsn(GOTO, startLabel);
+        method.visitLabel(endLabel);
+        return null;
+    }
+    // ---------------------------------------------------------------------------------------------
+    private Object forStmt (ForNode node)
     {
         Label startLabel = new Label();
         Label endLabel = new Label();

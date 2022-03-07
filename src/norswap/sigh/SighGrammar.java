@@ -35,6 +35,7 @@ public class SighGrammar extends Grammar
     public rule RBRACE          = word("}");
     public rule LPAREN          = word("(");
     public rule RPAREN          = word(")");
+    public rule BAR             = word("|");
     public rule LSQUARE         = word("[");
     public rule RSQUARE         = word("]");
     public rule COLON           = word(":");
@@ -316,7 +317,13 @@ public class SighGrammar extends Grammar
 
     public rule for_stmt =
         seq(_for, expression, statement)
+            .push($ -> new ForNode($.span(), $.$[0], $.$[1]));
+
+    /*
+    public rule for_stmt =
+        seq(_for,var_decl,BAR,expression,BAR, assignment_expression, block)
             .push($ -> new ForNode($.span(), $.$[0], $.$[1],$.$[2],$.$[3]));
+    */
 
     @Override public rule root () {
         return root;

@@ -17,7 +17,6 @@ import norswap.utils.visitors.ValuedVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.math.*;
 
 import static norswap.utils.Util.cast;
 import static norswap.utils.Vanilla.coIterate;
@@ -508,7 +507,7 @@ public final class Interpreter
     // ---------------------------------------------------------------------------------------------
     private Void ForStmt (ForNode node)
     {
-        for (get(node.init);get(node.condition);get(node.update))
+        while (get(node.condition))
             get(node.body);
         return null;
     }

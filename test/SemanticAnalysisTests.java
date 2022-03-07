@@ -110,16 +110,16 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
     // ---------------------------------------------------------------------------------------------
 
     @Test public void testOtherBinary() {
-        successInput("return true && false");
-        successInput("return false && true");
-        successInput("return true && true");
-        successInput("return true || false");
-        successInput("return false || true");
-        successInput("return false || false");
+        successInput("return true AND false");
+        successInput("return false AND true");
+        successInput("return true AND true");
+        successInput("return true OR false");
+        successInput("return false OR true");
+        successInput("return false OR false");
 
-        failureInputWith("return false || 1",
+        failureInputWith("return false OR 1",
             "Attempting to perform binary logic on non-boolean type: Int");
-        failureInputWith("return 2 || true",
+        failureInputWith("return 2 OR true",
             "Attempting to perform binary logic on non-boolean type: Int");
 
         successInput("return 1 + \"a\"");
@@ -272,6 +272,7 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("if (false) return 1 else if (false) return 2 else return 3 ");
 
         successInput("var i: Int = 0; while (i < 3) { print(\"\" + i); i = i + 1 } ");
+        successInput("var i: Int = 0; for (i < 3) { print(\"\" + i); i = i + 1 } ");
 
         failureInputWith("if 1 return 1",
             "If statement with a non-boolean condition of type: Int");

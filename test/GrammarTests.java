@@ -135,6 +135,10 @@ public class GrammarTests extends AutumnTestFixture {
         successExpect("while 1 < 2 { return } ", new WhileNode(null,
             new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
             new BlockNode(null, asList(new ReturnNode(null, null)))));
+
+        successExpect("for 1 < 2 { return } ", new ForNode(null,
+            new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
+            new BlockNode(null, asList(new ReturnNode(null, null)))));
     }
 
     // ---------------------------------------------------------------------------------------------

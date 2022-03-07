@@ -149,14 +149,26 @@ public class BytecodeTests
 
     @Test public void testLogic() {
         // check boolean logic
-        checkExpr("true  && true",  "true");
-        checkExpr("true  || true",  "true");
-        checkExpr("true  || false", "true");
-        checkExpr("false || true",  "true");
-        checkExpr("false && true",  "false");
-        checkExpr("true  && false", "false");
-        checkExpr("false && false", "false");
-        checkExpr("false || false", "false");
+        checkExpr("false AND  false", "false");
+        checkExpr("false AND  true ", "false");
+        checkExpr("true  AND  false", "false");
+        checkExpr("true  AND  true ", "true");
+        checkExpr("false OR   false", "false");
+        checkExpr("false OR   true ", "true");
+        checkExpr("true  OR   false", "true");
+        checkExpr("true  OR   true ", "true");
+        checkExpr("false XOR  false", "false");
+        checkExpr("false XOR  true ", "true");
+        checkExpr("true  XOR  false", "true");
+        checkExpr("true  XOR  true ", "true");
+        checkExpr("false NAND false", "false");
+        checkExpr("false NAND true ", "true");
+        checkExpr("true  NAND false", "true");
+        checkExpr("true  NAND true ", "true");
+        checkExpr("false NOR  false", "false");
+        checkExpr("false NOR  true ", "true");
+        checkExpr("true  NOR  false", "true");
+        checkExpr("true  NOR  true ", "true");
 
         checkExpr("1 + \"a\"", "1a");
         checkExpr("\"a\" + 1", "a1");
@@ -184,8 +196,8 @@ public class BytecodeTests
         checkExpr("[1] != [1]", "true");
 
         // test short circuit
-        checkExpr("true || print(\"x\") == \"y\"", "true");
-        checkExpr("false && print(\"x\") == \"y\"", "false");
+        checkExpr("true OR print(\"x\") == \"y\"", "true");
+        checkExpr("false AND print(\"x\") == \"y\"", "false");
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -250,6 +262,9 @@ public class BytecodeTests
 
         check("var x: Int = 1 ; while x == 3 { " + printx + "}", "");
         check("var x: Int = 1 ; while x <= 3 { " + printx + " ; x = x + 1 }", "1\n2\n3");
+
+        check("var x: Int = 1 ; for x == 3 { " + printx + "}", "");
+        check("var x: Int = 1 ; for x <= 3 { " + printx + " ; x = x + 1 }", "1\n2\n3");
     }
 
     @Test public void testMethod() {

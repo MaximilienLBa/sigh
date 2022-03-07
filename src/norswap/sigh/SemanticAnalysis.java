@@ -855,9 +855,9 @@ public final class SemanticAnalysis
         R.rule()
             .using(node.condition, "type")
             .by(r -> {
-                Type type = r.get(1);
+                Type type = r.get(0);
                 if (!(type instanceof BoolType)) {
-                    r.error("For statement with a non-boolean condition of type: " + type,
+                    r.error("for statement with a non-boolean condition of type: " + type,
                         node.condition);
                 }
             });

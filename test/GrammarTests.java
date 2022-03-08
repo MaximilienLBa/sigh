@@ -1,7 +1,10 @@
 import norswap.autumn.AutumnTestFixture;
 import norswap.sigh.SighGrammar;
 import norswap.sigh.ast.*;
+import norswap.sigh.types.IntType;
 import org.testng.annotations.Test;
+
+import java.util.Collections;
 
 import static java.util.Arrays.asList;
 import static norswap.sigh.ast.BinaryOperator.*;
@@ -107,8 +110,19 @@ public class GrammarTests extends AutumnTestFixture {
                 asList(new ParameterNode(null, "x", new SimpleTypeNode(null, "Int"))),
                 new SimpleTypeNode(null, "Int"),
                 new BlockNode(null, asList(new ReturnNode(null, intlit(1))))));
-    }
 
+        successExpect("var intArray: Int[] = []", new VarDeclarationNode(null,"intArray",
+            new ArrayTypeNode(null,new SimpleTypeNode(null,"Int")),
+            new ArrayLiteralNode(null, Collections.emptyList())));
+
+        successExpect("var queue: Queue<Int> = []", new QueueDeclarationNode(null,"queue",
+            new QueueTypeNode(null,new SimpleTypeNode(null,"Int")),
+            new ArrayLiteralNode(null, Collections.emptyList())));
+
+        successExpect("var stack: Stack<Int> = []", new StackDeclarationNode(null,"stack",
+            new StackTypeNode(null,new SimpleTypeNode(null,"Int")),
+            new ArrayLiteralNode(null, Collections.emptyList())));
+    }
     // ---------------------------------------------------------------------------------------------
 
     @Test public void testStatements() {
@@ -136,9 +150,17 @@ public class GrammarTests extends AutumnTestFixture {
             new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
             new BlockNode(null, asList(new ReturnNode(null, null)))));
 
-        successExpect("for 1 < 2 { return } ", new ForNode(null,
+        successExpect("for var x: Int = 1 | 1 < 2 { return} ", new ForNode(null,
+            new VarDeclarationNode(null, "x", new SimpleTypeNode(null, "Int"), intlit(1)),
             new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
             new BlockNode(null, asList(new ReturnNode(null, null)))));
+
+        /* NOT WORKING
+        successExpect("for (var x: Int = 1 | 1 < 2) { return} ", new ForNode(null,
+            new VarDeclarationNode(null, "x", new SimpleTypeNode(null, "Int"), intlit(1)),
+            new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
+            new BlockNode(null, asList(new ReturnNode(null, null)))));
+         */
     }
 
     // ---------------------------------------------------------------------------------------------

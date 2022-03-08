@@ -16,7 +16,30 @@ public class QueueLiteralNode extends ExpressionNode
 
     @Override public String contents ()
     {
-        //@TODO
-        return null;
+        if (components.size() == 0)
+            return "[]";
+
+        int budget = contentsBudget() - 2; // 2 == "[]".length()
+        StringBuilder b = new StringBuilder("[");
+        int i = 0;
+
+        for (ExpressionNode it: components)
+        {
+            if (i > 0) b.append(", ");
+            String contents = it.contents();
+            budget -= 2 + contents.length();
+            if (i == components.size() - 1) {
+                if (budget < 0) break;
+            } else {
+                if (budget - ", ...".length() < 0) break;
+            }
+            b.append(contents);
+            ++i;
+        }
+
+        if (i < components.size())
+            b.append("...");
+
+        return b.append(']').toString();
     }
 }

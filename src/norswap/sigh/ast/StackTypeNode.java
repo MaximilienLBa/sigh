@@ -13,6 +13,6 @@ public final class StackTypeNode extends TypeNode
     }
 
     @Override public String contents() {
-        return "<" + componentType.contents() + ">";
+        return "Stack<" + componentType.contents() + ">";
     }
 }

@@ -64,6 +64,7 @@ public class SighGrammar extends Grammar
     public rule _else           = reserved("else");
     public rule _while          = reserved("while");
     public rule _for          = reserved("for");
+    public rule _matching       = reserved("match");
     public rule _return         = reserved("return");
 
     public rule number =
@@ -123,11 +124,11 @@ public class SighGrammar extends Grammar
         .push($ -> new ArrayLiteralNode($.span(), $.$[0]));
 
     public rule queue =
-        seq(LANGLE, expressions, RANGLE)
-        .push($ -> new QueueLiteralNode($.span(), $.$[0]));
+        seq(LSQUARE, expressions, RSQUARE)
+            .push($ -> new QueueLiteralNode($.span(), $.$[0]));
 
     public rule stack =
-        seq(LANGLE, expressions, RANGLE)
+        seq(LSQUARE, expressions, RSQUARE)
         .push($ -> new StackLiteralNode($.span(), $.$[0]));
 
     public rule basic_expression = choice(
@@ -150,6 +151,10 @@ public class SighGrammar extends Grammar
             $ -> new FieldAccessNode($.span(), $.$[0], $.$[1]))
         .suffix(seq(LSQUARE, lazy(() -> this.expression), RSQUARE),
             $ -> new ArrayAccessNode($.span(), $.$[0], $.$[1]))
+        /*
+        .suffix(seq(LSQUARE, lazy(() -> this.expression), RSQUARE),
+            $ -> new QueueAccessNode($.span(), $.$[0], $.$[1]))
+         */
         .suffix(function_args,
             $ -> new FunCallNode($.span(), $.$[0], $.$[1]));
 
@@ -233,30 +238,41 @@ public class SighGrammar extends Grammar
             return true;
         });
 
-    public rule array_type = left_expression()
-        .left(simple_type)
-        .suffix(seq(LSQUARE, RSQUARE),
+    public rule array_t = left_expression() //var intArray: Int[] = []
+        .left(simple_type) //Int
+        .suffix(seq(LSQUARE, RSQUARE),//[]
             $ -> new ArrayTypeNode($.span(), $.$[0]));
 
-    public rule queue_type = left_expression()
-        .left(simple_type)
-        .suffix(seq(LANGLE,RANGLE),
+    public rule queue_t = left_expression() //var queue: Queue< Int > = []
+        .left("Queue") //queue
+        .suffix(seq(LANGLE,simple_type,RANGLE),
             $ -> new QueueTypeNode($.span(), $.$[0]));
-    public rule stack_type = left_expression()
-        .left(simple_type)
-        .suffix(seq(LANGLE,RANGLE),
+
+    public rule stack_t = left_expression()
+        .left("Stack") //queue
+        .suffix(seq(LANGLE,simple_type,RANGLE),
             $ -> new StackTypeNode($.span(), $.$[0]));
-    public rule type =
-        seq(array_type);
+
+    public rule type_array =
+        seq(array_t);
+
+    public rule type_queue =
+        seq(queue_t);
+
+    public rule type_stack =
+        seq(stack_t);
 
     public rule statement = lazy(() -> choice(
         this.block,
         this.var_decl,
+        this.queue_decl,
+        this.stack_decl,
         this.fun_decl,
         this.struct_decl,
         this.if_stmt,
         this.while_stmt,
         this.for_stmt,
+        this.matching_stmt,
         this.return_stmt,
         this.expression_stmt));
 
@@ -269,11 +285,19 @@ public class SighGrammar extends Grammar
         .push($ -> new BlockNode($.span(), $.$[0]));
 
     public rule var_decl =
-        seq(_var, identifier, COLON, type, EQUALS, expression)
+        seq(_var, identifier, COLON, type_array, EQUALS, expression)
         .push($ -> new VarDeclarationNode($.span(), $.$[0], $.$[1], $.$[2]));
 
+    public rule queue_decl =
+        seq(_var, identifier, COLON, type_queue, EQUALS, expression)
+            .push($ -> new QueueDeclarationNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule stack_decl =
+        seq(_var, identifier, COLON, type_stack, EQUALS, expression)
+            .push($ -> new StackDeclarationNode($.span(), $.$[0], $.$[1], $.$[2]));
+
     public rule parameter =
-        seq(identifier, COLON, type)
+        seq(identifier, COLON, type_array)
         .push($ -> new ParameterNode($.span(), $.$[0], $.$[1]));
 
     public rule parameters =
@@ -281,14 +305,14 @@ public class SighGrammar extends Grammar
         .as_list(ParameterNode.class);
 
     public rule maybe_return_type =
-        seq(COLON, type).or_push_null();
+        seq(COLON, type_array).or_push_null();
 
     public rule fun_decl =
         seq(_fun, identifier, LPAREN, parameters, RPAREN, maybe_return_type, block)
         .push($ -> new FunDeclarationNode($.span(), $.$[0], $.$[1], $.$[2], $.$[3]));
 
     public rule field_decl =
-        seq(_var, identifier, COLON, type)
+        seq(_var, identifier, COLON, type_array)
         .push($ -> new FieldDeclarationNode($.span(), $.$[0], $.$[1]));
 
     public rule struct_body =
@@ -315,15 +339,16 @@ public class SighGrammar extends Grammar
         .as_list(StatementNode.class)
         .push($ -> new RootNode($.span(), $.$[0]));
 
-    public rule for_stmt =
-        seq(_for, expression, statement)
-            .push($ -> new ForNode($.span(), $.$[0], $.$[1]));
 
-    /*
+    //for var : | i < {}
     public rule for_stmt =
-        seq(_for,var_decl,BAR,expression,BAR, assignment_expression, block)
-            .push($ -> new ForNode($.span(), $.$[0], $.$[1],$.$[2],$.$[3]));
-    */
+        seq(_for,var_decl, BAR, expression, statement)
+            .push($ -> new ForNode($.span(), $.$[0], $.$[1], $.$[2] ));
+
+    public rule matching_stmt =
+        seq(_matching,expression,statement)
+            .push($ -> new MatchNode($.span(), $.$[0], $.$[1]));
+
 
     @Override public rule root () {
         return root;

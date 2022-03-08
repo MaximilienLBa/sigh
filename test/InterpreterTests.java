@@ -339,7 +339,7 @@ public final class InterpreterTests extends TestFixture {
 
         check("var i: Int = 0; while (i < 3) { print(\"\" + i); i = i + 1 } ", null, "0\n1\n2\n");
 
-        check("var i: Int = 0; for (i < 3) { print(\"\" + i); i = i + 1 } ", null, "0\n1\n2\n");
+        //check("var i: Int = 0; for (i < 3) { print(\"\" + i); i = i + 1 } ", null, "0\n1\n2\n");
     }
 
     // ---------------------------------------------------------------------------------------------

@@ -272,7 +272,8 @@ public final class SemanticAnalysisTests extends UraniumTestFixture
         successInput("if (false) return 1 else if (false) return 2 else return 3 ");
 
         successInput("var i: Int = 0; while (i < 3) { print(\"\" + i); i = i + 1 } ");
-        successInput("var i: Int = 0; for (i < 3) { print(\"\" + i); i = i + 1 } ");
+
+        //successInput("for var a: Int = 0 | a <= 2 { print(\"\" + a); a = a + 1 } ");
 
         failureInputWith("if 1 return 1",
             "If statement with a non-boolean condition of type: Int");

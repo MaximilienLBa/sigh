@@ -852,6 +852,10 @@ public final class SemanticAnalysis
     // ---------------------------------------------------------------------------------------------
 
     private void ForStmt (ForNode node) {
+
+
+        varDecl(node.declarationNode);
+
         R.rule()
             .using(node.condition, "type")
             .by(r -> {
@@ -861,6 +865,7 @@ public final class SemanticAnalysis
                         node.condition);
                 }
             });
+
     }
 
     // ---------------------------------------------------------------------------------------------

@@ -13,6 +13,6 @@ public final class QueueTypeNode extends TypeNode
     }
 
     @Override public String contents() {
-        return "<" + componentType.contents() + ">";
+        return "Queue<" + componentType.contents() + ">";
     }
 }

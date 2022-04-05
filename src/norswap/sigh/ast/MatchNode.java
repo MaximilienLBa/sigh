@@ -2,15 +2,20 @@ package norswap.sigh.ast;
 
 import norswap.autumn.positions.Span;
 import norswap.utils.Util;
+import java.util.List;
 
-public class MatchNode extends StatementNode {
-    public final ExpressionNode condition;
-    public final StatementNode Statement;
+public final class MatchNode extends StatementNode {
 
-    public MatchNode (Span span, Object condition, Object Statement) {
+    public final String name;
+    public final List<CaseNodeAlt> cases;
+    public final StatementNode defaultStatement;
+
+    public MatchNode (Span span, Object name, Object cases, Object defaultStatement){
         super(span);
-        this.condition = Util.cast(condition, ExpressionNode.class);
-        this.Statement = Util.cast(Statement, StatementNode.class);
+        this.name = Util.cast(name, String.class);
+        this.cases = Util.cast(cases,List.class);
+        this.defaultStatement = defaultStatement == null
+            ? null : Util.cast(defaultStatement, StatementNode.class);
     }
 
     @Override public String contents ()

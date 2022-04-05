@@ -50,6 +50,7 @@ public class SighGrammar extends Grammar
     public rule DOT             = word(".");
     public rule DOLLAR          = word("$");
     public rule COMMA           = word(",");
+    public rule ARROW           = word("->");
     public rule POWER               = word("^");
     public rule AND                 = word("AND");
     public rule OR                  = word("OR");
@@ -64,7 +65,10 @@ public class SighGrammar extends Grammar
     public rule _else           = reserved("else");
     public rule _while          = reserved("while");
     public rule _for          = reserved("for");
-    public rule _matching       = reserved("match");
+    public rule _match          = reserved("match");
+    public rule _case           = reserved("case");
+    public rule _of             = reserved("of");
+    public rule _default         = reserved("default");
     public rule _return         = reserved("return");
 
     public rule number =
@@ -325,6 +329,17 @@ public class SighGrammar extends Grammar
     public rule if_stmt =
         seq(_if, expression, statement, seq(_else, statement).or_push_null())
         .push($ -> new IfNode($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule case_stmt =
+        seq(_case, type, identifier, ARROW, statement)
+        .push($ -> new CaseNodeAlt($.span(), $.$[0], $.$[1], $.$[2]));
+
+    public rule cases =
+        case_stmt.sep(0, "")
+        .as_list(CaseNodeAlt.class);
+
+    public rule match_stmt =
+        seq(_match, identifier, _of, LBRACE, cases , seq(_default, ARROW, statement));
 
     public rule while_stmt =
         seq(_while, expression, statement)

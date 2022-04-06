@@ -50,7 +50,7 @@ public class SighGrammar extends Grammar
     public rule DOT             = word(".");
     public rule DOLLAR          = word("$");
     public rule COMMA           = word(",");
-    public rule ARROW           = word("->");
+    public rule ARROW               = word("->");
     public rule POWER               = word("^");
     public rule AND                 = word("AND");
     public rule OR                  = word("OR");
@@ -64,11 +64,11 @@ public class SighGrammar extends Grammar
     public rule _if             = reserved("if");
     public rule _else           = reserved("else");
     public rule _while          = reserved("while");
-    public rule _for          = reserved("for");
-    public rule _match          = reserved("match");
-    public rule _case           = reserved("case");
-    public rule _of             = reserved("of");
-    public rule _default         = reserved("default");
+    public rule _for                = reserved("for");
+    public rule _match              = reserved("match");
+    public rule _case               = reserved("case");
+    public rule _of                 = reserved("of");
+    public rule _default            = reserved("default");
     public rule _return         = reserved("return");
 
     public rule number =
@@ -276,7 +276,7 @@ public class SighGrammar extends Grammar
         this.if_stmt,
         this.while_stmt,
         this.for_stmt,
-        this.matching_stmt,
+        this.match_stmt,
         this.return_stmt,
         this.expression_stmt));
 
@@ -331,7 +331,7 @@ public class SighGrammar extends Grammar
         .push($ -> new IfNode($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule case_stmt =
-        seq(_case, type, identifier, ARROW, statement)
+        seq(_case, type_array, identifier, ARROW, statement)
         .push($ -> new CaseNodeAlt($.span(), $.$[0], $.$[1], $.$[2]));
 
     public rule cases =
@@ -359,10 +359,6 @@ public class SighGrammar extends Grammar
     public rule for_stmt =
         seq(_for,var_decl, BAR, expression, statement)
             .push($ -> new ForNode($.span(), $.$[0], $.$[1], $.$[2] ));
-
-    public rule matching_stmt =
-        seq(_matching,expression,statement)
-            .push($ -> new MatchNode($.span(), $.$[0], $.$[1]));
 
 
     @Override public rule root () {

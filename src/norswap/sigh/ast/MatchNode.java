@@ -20,7 +20,7 @@ public final class MatchNode extends StatementNode {
 
     @Override public String contents ()
     {
-        String candidate = String.format("case %s of ...", condition.contents());
+        String candidate = String.format("case %s of ...", name);
 
         return candidate.length() <= contentsBudget()
             ? candidate

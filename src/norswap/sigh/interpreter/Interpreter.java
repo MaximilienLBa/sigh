@@ -16,6 +16,8 @@ import norswap.utils.exceptions.NoStackException;
 import norswap.utils.visitors.ValuedVisitor;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import static norswap.utils.Util.cast;
@@ -86,6 +88,7 @@ public final class Interpreter
         visitor.register(IfNode.class,                   this::ifStmt);
         visitor.register(WhileNode.class,                this::whileStmt);
         visitor.register(ForNode.class,                  this::ForStmt);
+        visitor.register(MatchNode.class,                this::matchStmt);
         visitor.register(ReturnNode.class,               this::returnStmt);
 
         visitor.registerFallback(node -> null);
@@ -505,10 +508,26 @@ public final class Interpreter
     }
 
     // ---------------------------------------------------------------------------------------------
+
     private Void ForStmt (ForNode node)
     {
         while (get(node.condition))
             get(node.body);
+        return null;
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    private Void matchStmt(MatchNode node)
+    {
+        //String x = node.name;
+        //List<CaseNodeAlt> List = node.cases;
+        //StatementNode defaultStatement = node.defaultStatement;
+
+        //for(int i=0;i<List.size();i++) {
+        //    CaseNodeAlt iCase = List.get(i);
+        //    TODO: problèmes de reconnaissance de classe avec TypeNode pour décider quel case passe
+        //:}
         return null;
     }
 

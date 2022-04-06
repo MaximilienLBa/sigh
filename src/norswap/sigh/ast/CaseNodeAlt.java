@@ -18,6 +18,7 @@ public final class CaseNodeAlt extends StatementNode {
 
     @Override public String contents ()
     {
-        return null; //TODO
+        //return String.format("case %s of %s -> %s",type,name,statement);
+        return null;
     }
 }

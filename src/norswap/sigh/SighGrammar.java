@@ -355,10 +355,10 @@ public class SighGrammar extends Grammar
         .push($ -> new RootNode($.span(), $.$[0]));
 
 
-    //for var : | i < {}
+    //for var : | i < | i = {}
     public rule for_stmt =
-        seq(_for,var_decl, BAR, expression, statement)
-            .push($ -> new ForNode($.span(), $.$[0], $.$[1], $.$[2] ));
+        seq(_for,var_decl, BAR, expression, BAR, assignment_expression, statement)
+            .push($ -> new ForNode($.span(), $.$[0], $.$[1], $.$[2],$.$[3] ));
 
 
     @Override public rule root () {

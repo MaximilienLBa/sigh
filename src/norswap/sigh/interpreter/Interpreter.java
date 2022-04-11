@@ -511,8 +511,13 @@ public final class Interpreter
 
     private Void ForStmt (ForNode node)
     {
-        while (get(node.condition))
+        VarDeclarationNode var = node.declarationNode;
+
+        while(get(node.condition)){
             get(node.body);
+            get(node.termination);
+        }
+
         return null;
     }
 

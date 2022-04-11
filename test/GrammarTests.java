@@ -150,12 +150,15 @@ public class GrammarTests extends AutumnTestFixture {
             new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
             new BlockNode(null, asList(new ReturnNode(null, null)))));
 
-        successExpect("for var x: Int = 1 | 1 < 2 { return} ", new ForNode(null,
+        /* NOT WORKING
+
+        successExpect("for var x: Int = 1 | 1 < 2 | x = x + 1 { return} ",
+            new ForNode(null,
             new VarDeclarationNode(null, "x", new SimpleTypeNode(null, "Int"), intlit(1)),
             new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
+            new AssignmentNode(null,"x","x+1"),
             new BlockNode(null, asList(new ReturnNode(null, null)))));
 
-        /* NOT WORKING
         successExpect("for (var x: Int = 1 | 1 < 2) { return} ", new ForNode(null,
             new VarDeclarationNode(null, "x", new SimpleTypeNode(null, "Int"), intlit(1)),
             new BinaryExpressionNode(null, intlit(1), LOWER, intlit(2)),
